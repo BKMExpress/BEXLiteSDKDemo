@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Demo: Customised BEXSecureCardNumberEditText inside an XML layout.
+
+    This file shows merchants how to style the secure card input to match their app's design.
+
+    WHAT MERCHANTS CAN CUSTOMISE
+    ─────────────────────────────
+    Container (FrameLayout / BEXSecureCardNumberEditText itself):
+      • android:background       → any drawable, colour or shape (rounded corners, stroke, shadow)
+      • android:padding          → inner spacing between the container edge and text
+      • android:elevation / card_view:cardElevation → shadow depth
+      • android:layout_margin    → space around the component inside a parent layout
+
+    Inner text field (via app: attrs or Kotlin API):
+      • app:bexCardHint          → placeholder text when the field is empty
+      • app:bexCardTextColor     → colour of the digits the user types
+      • app:bexCardHintColor     → colour of the placeholder text
+      • app:bexCardTextSize      → size of the digits (e.g. 18sp)
+      • app:bexCardLetterSpacing → spacing between digits (EM units, e.g. 0.08)
+
+    Programmatic-only (Kotlin/Java):
+      • setCardTextTypeface(Typeface)   → custom font loaded from res/font/
+      • setCardHint(CharSequence)
+      • setCardTextColor(@ColorInt)
+      • setCardHintTextColor(@ColorInt)
+      • setCardTextSizeSp(Float)
+      • setCardLetterSpacing(Float)
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- ── Label ── -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:letterSpacing="0.04"
+        android:text="Kart Numarası"
+        android:textColor="#00B9C8"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!--
+        BEXSecureCardNumberEditText – the secure PCI-compliant input.
+
+        • android:background points to a custom shape drawable that merchants
+          swap out for their own brand background.
+        • android:padding controls the inner whitespace.
+        • app:bexCard* attributes customise the inner EditText appearance.
+
+        The raw card number is NEVER accessible from this XML file or from
+        any Kotlin/Java code outside the SDK. Only getTokenizedPan() is exposed.
+    -->
+    <com.bkm.mobil.sdk.lite.ui.BEXSecureCardNumberEditText
+        android:id="@+id/secureCardInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_secure_card_input"
+        android:elevation="2dp"
+        android:paddingHorizontal="16dp"
+        app:bexCardHint="•••• •••• •••• ••••"
+        app:bexCardHintColor="#BDBDBD"
+        app:bexCardLetterSpacing="0.08"
+        app:bexCardTextColor="#1A1A2E"
+        app:bexCardTextSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="6dp"
+        android:letterSpacing="0.04"
+        android:text="Son Kullanma Tarihi"
+        android:textColor="#00B9C8"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/expiryInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_secure_card_input"
+        android:elevation="2dp"
+        android:hint="AA/YY"
+        android:inputType="number"
+        android:letterSpacing="0.08"
+        android:maxLength="4"
+        android:paddingHorizontal="16dp"
+        android:textColor="#1A1A2E"
+        android:textColorHint="#BDBDBD"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="6dp"
+        android:letterSpacing="0.04"
+        android:text="Kart adı (isteğe bağlı)"
+        android:textColor="#00B9C8"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/aliasInput"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_secure_card_input"
+        android:elevation="2dp"
+        android:hint="Örn. İş kartım"
+        android:inputType="text"
+        android:maxLength="64"
+        android:paddingHorizontal="16dp"
+        android:textColor="#1A1A2E"
+        android:textColorHint="#BDBDBD"
+        android:textSize="16sp" />
+
+    <!-- ── Agreement checkbox (standalone) ── -->
+    <LinearLayout
+        android:id="@+id/agreementRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal">
+
+        <com.bkm.mobil.sdk.lite.ui.BEXAgreementCheckboxView
+            android:id="@+id/agreementCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:bexAgreementCheckedColor="@color/teal_200"
+            app:bexAgreementCheckmarkColor="@android:color/holo_blue_light"
+            app:bexAgreementDefaultChecked="false"
+            app:bexAgreementUncheckedColor="@android:color/holo_red_dark" />
+
+        <TextView
+            android:id="@+id/agreementText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:paddingTop="2dp"
+            android:textColor="#1A1A2E"
+            android:textSize="14sp"
+            tools:text="Kullanıcı sözleşmesi" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:text="İptal"
+            android:textAllCaps="false"
+            android:textColor="#00B9C8"
+            android:textSize="16sp"
+            app:cornerRadius="12dp"
+            app:strokeColor="#00B9C8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addCardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:backgroundTint="#00B9C8"
+            android:text="Kaydet"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp" />
+    </LinearLayout>
+
+
+</LinearLayout>
